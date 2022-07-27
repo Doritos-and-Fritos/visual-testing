@@ -2,11 +2,11 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, ready_for_review, synchronize]
+    types: [ opened, ready_for_review, synchronize ]
 
 jobs:
-  snapshot-update:
-    name: snapshot-update
+  visual-tests:
+    name: visual-tests
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -17,12 +17,20 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Install Playwright
         run: yarn playwright install --with-deps
-      - name: Upload to s3
+      - name: Download from s3
         run: |
-            aws s3 sync s3://baseline-snapshots/playwright-snapshots/ snapshots/
+          aws s3 sync s3://baseline-snapshots/playwright-snapshots/ snapshots/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
       - name: Run your tests
         run: yarn update-snapshots
+      - name: Upload test report to s3
+        if: failure()
+        run: |
+            aws s3 sync playwright-report s3://visual-playwright-reports
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
