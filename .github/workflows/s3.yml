@@ -22,10 +22,6 @@ jobs:
         run: yarn playwright install --with-deps
       - name: Run your tests
         run: yarn update-snapshots
-  deploy:
-    runs-on: ubuntu-latest
-    needs: snapshot-update
-    steps:
       - uses: actions/checkout@master
       - uses: jakejarvis/s3-sync-action@master
         with:
