@@ -25,7 +25,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
       - name: Run your tests
-        run: yarn update-snapshots
+        run: yarn test
       - name: Upload test report to s3
         if: failure()
         run: |
