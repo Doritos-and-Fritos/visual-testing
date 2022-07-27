@@ -7,6 +7,6 @@ test('Google visual test', async ({page}) => {
     })
 
     await test.step('Then the account page is visually correct', async () => {
-        expect(await page.screenshot({})).toMatchSnapshot('verified-account.png')
+        expect(await page.screenshot()).toMatchSnapshot('verified-account.png')
     })
 })

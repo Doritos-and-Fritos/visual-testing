@@ -6,7 +6,8 @@
   "author": "David Kelly <david.kelly@ticketswap.com>",
   "license": "MIT",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "update-snapshots": "playwright test --update-snapshots"
   },
   "dependencies": {
     "@playwright/test": "^1.24.1"
