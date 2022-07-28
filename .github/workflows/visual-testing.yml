@@ -39,6 +39,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
       - name: Render template
+        if: failure()
         id: template
         uses: chuhlomin/render-template@v1.4
         with:
@@ -46,6 +47,7 @@ jobs:
             vars: |
             pr: ${GITHUB_HEAD_REF}
       - name: Link report in comment
+        if: failure()
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.number  }}
