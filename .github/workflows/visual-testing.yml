@@ -42,6 +42,7 @@ jobs:
         if: failure()
         uses: peter-evans/create-or-update-comment@v2
         with:
+          issue: ${{ github.event.number  }}
           body: |
                   ${GITHUB_HEAD_REF}
                   $GITHUB_WORKFLOW_URL
