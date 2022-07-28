@@ -33,18 +33,20 @@ jobs:
       - name: Upload test report to s3
         if: failure()
         run: |
-            aws s3 sync playwright-report s3://visual-playwright-reports/$BRANCH
+          aws s3 sync playwright-report s3://visual-playwright-reports/$BRANCH
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
-      - name: Comment
+  comment:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/github-script@v6
         with:
           script: |
-              github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: '👋 Thanks for reporting!'
-                })
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
