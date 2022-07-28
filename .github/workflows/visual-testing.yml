@@ -48,5 +48,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Thanks for reporting! $GITHUB_HEAD_REF $BRANCH ${{ secrets.AWS_ACCESS_KEY_ID }}'
+              body: '👋 Thanks for reporting! ${{ GITHUB_HEAD_REF }} ${{ BRANCH }} ${{ secrets.AWS_ACCESS_KEY_ID }}'
             })
