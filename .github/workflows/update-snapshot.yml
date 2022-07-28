@@ -2,8 +2,22 @@ on:
   push:
     branches:
       - main
+  issue_comment:
+    types: [created]
 
 jobs:
+  trigger-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: khan/pull-request-comment-trigger@v1.1.0
+        id: check
+        with:
+          trigger: '@deploy'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - run: snapshot-update
+        if: steps.check.outputs.triggered == 'true'
   snapshot-update:
     name: snapshot-update
     runs-on: ubuntu-20.04
