@@ -40,15 +40,9 @@ jobs:
           AWS_DEFAULT_REGION: 'eu-central-1'
       - name: Render template
         if: failure()
-        id: template
-        uses: chuhlomin/render-template@v1.4
+        uses: NejcZdovc/comment-pr@v1
         with:
-            template: comment-template.md
-            vars: |
-            pr: ${GITHUB_HEAD_REF}
-      - name: Link report in comment
-        if: failure()
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.number  }}
-          body: ${{ steps.template.outputs.result }}
+          file: "comment.md"
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          DATA: ${GITHUB_HEAD_REF}
