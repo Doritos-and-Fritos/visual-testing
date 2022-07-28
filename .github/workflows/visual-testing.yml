@@ -45,4 +45,4 @@ jobs:
           file: "comment.md"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          DATA: $BRANCH
+          DATA: ${{ BRANCH }}
