@@ -44,6 +44,6 @@ jobs:
         with:
           issue-number: ${{ github.event.number  }}
           body: |
-                  ${GITHUB_HEAD_REF}
-                  $GITHUB_WORKFLOW_URL
-                  Looks like you've introduced visual changes, please review the report: https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${GITHUB_HEAD_REF}/index.html
+                  ${{GITHUB_HEAD_REF}}
+                  ${{GITHUB_WORKFLOW_URL}}
+                  Looks like you've introduced visual changes, please review the report: https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{GITHUB_HEAD_REF}}/index.html
