@@ -4,9 +4,6 @@ on:
       - main
     types: [ opened, ready_for_review, synchronize ]
 
-env:
-  BRANCH: ${GITHUB_HEAD_REF}
-  GITHUB_WORKFLOW_URL: https://github:com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
 
 jobs:
 #  visual-tests:
