@@ -1,15 +1,19 @@
 on:
-  push:
-    branches:
-      - main
   issue_comment:
-    types: [created]
+    types: [ created ]
 
 jobs:
   snapshot-update:
     name: snapshot-update
     runs-on: ubuntu-20.04
     steps:
+      - uses: khan/pull-request-comment-trigger@v1.1.0
+        id: check
+        with:
+          trigger: '/baseline'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
