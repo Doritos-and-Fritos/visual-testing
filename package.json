@@ -10,6 +10,9 @@
     "update-snapshots": "playwright test --update-snapshots"
   },
   "dependencies": {
+    "@actions/core": "^1.9.0",
+    "@actions/github": "^5.0.3",
+    "@octokit/action": "^4.0.4",
     "@playwright/test": "^1.24.1"
   }
 }
