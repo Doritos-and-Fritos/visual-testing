@@ -2,12 +2,11 @@ on:
   push:
     branches:
       - main
-
 jobs:
   snapshot-update:
     name: snapshot-update
     runs-on: ubuntu-20.04
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/baseline'}}
+#    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/baseline'}}
     steps:
       - run: echo "Updating baseline snapshots"
       - uses: actions/checkout@v3
