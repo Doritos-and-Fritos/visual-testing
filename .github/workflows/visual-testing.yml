@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: peter-evans/create-or-update-comment@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -35,9 +34,10 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
-#      - name: Make comment
-#        if: failure()
-#        with:
-#            issue-number: ${{ github.event.pull_request.number }}
-#            body: |
-#                  This PR introduces visual changes, please check them out here! [Visual tests report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
+      - uses: peter-evans/create-or-update-comment@v2
+      - name: Make comment
+        if: failure()
+        with:
+            issue-number: ${{ github.event.pull_request.number }}
+            body: |
+                  This PR introduces visual changes, please check them out here! [Visual tests report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
