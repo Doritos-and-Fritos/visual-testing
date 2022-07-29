@@ -1,1 +1,0 @@
-Looks like you've introduced visual changes, please review the report: https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/{DATA}/index.html
