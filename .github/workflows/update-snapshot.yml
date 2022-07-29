@@ -1,8 +1,7 @@
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [ opened, ready_for_review, synchronize ]
 
 jobs:
   snapshot-update:
@@ -11,50 +10,20 @@ jobs:
     if: ${{ github.event.issue.pull_request && github.event.comment.body == '/baseline'}}
     steps:
       - run: echo "Updating baseline snapshots"
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v2
-#        with:
-#          node-version: '14'
-#      - name: Install dependencies
-#        run: yarn install --frozen-lockfile
-#      - name: Install Playwright
-#        run: yarn playwright install --with-deps
-#      - name: Run your tests
-#        run: yarn update-snapshots
-#      - name: Upload to s3
-#        run: |
-#          aws s3 sync snapshots/ s3://baseline-snapshots/playwright-snapshots/
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          AWS_DEFAULT_REGION: 'eu-central-1'
-  my-action:
-    runs-on: ubuntu-latest
-    steps:
-      # Check out code using git
-      - uses: actions/checkout@v2
-      # Install Node 12
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
         with:
-          version: 12
-      - run: npm install @octokit/action
-      # Node.js script can be anywhere. A good convention is to put local GitHub Actions
-      # into the `.github/actions` folder
-      - run: node .github/actions/my-script.js
+          node-version: '14'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Install Playwright
+        run: yarn playwright install --with-deps
+      - name: Run your tests
+        run: yarn update-snapshots
+      - name: Upload to s3
+        run: |
+          aws s3 sync snapshots/ s3://baseline-snapshots/playwright-snapshots/
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  setup:
-    name: Get check run ids from action run id
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fetch check run ids
-        id: fetch
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/{repo}/actions/runs/{run_id}/jobs
-          repo: ${{ github.repository }}
-          run_id: ${{ github.run_id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Echo check run ids
-        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
