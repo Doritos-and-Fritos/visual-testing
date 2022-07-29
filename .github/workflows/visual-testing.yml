@@ -30,7 +30,7 @@ jobs:
         if: failure()
         run: |
           aws s3 sync playwright-report s3://visual-playwright-reports/${{ github.head_ref }}
-          aws s3 cp .github/workflows/test.html s3://visual-playwright-reports/${{ github.head_ref }}
+          aws s3 cp .github/workflows/test.html s3://visual-playwright-reports/${{ github.head_ref }}/test.html
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
