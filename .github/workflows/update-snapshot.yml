@@ -6,19 +6,6 @@ on:
     types: [created]
 
 jobs:
-  trigger-update:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: khan/pull-request-comment-trigger@v1.1.0
-        id: check
-        with:
-          trigger: '/baseline'
-          prefix_only: 'true'
-          reaction: rocket
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - run: 'echo Found it!'
-        if: steps.check.outputs.triggered == 'true'
   snapshot-update:
     name: snapshot-update
     runs-on: ubuntu-20.04
