@@ -12,8 +12,8 @@ async function run() {
         runId,
     });
 
-    const id = data.jobs.find(({ name }) => name === 'MY RUN NAME')?.id ?? undefined;
-    console.log(id);
+
+    console.log(data);
 }
 
 run()
