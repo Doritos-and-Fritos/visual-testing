@@ -54,5 +54,5 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            This PR introduces visual changes, please check them out here! (https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html "Visual test report")
+            This PR introduces visual changes, please check them out here! [Visual test report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
           reactions: '+1'
