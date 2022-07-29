@@ -6,14 +6,8 @@ jobs:
   snapshot-update:
     name: snapshot-update
     runs-on: ubuntu-20.04
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/baseline'}}
     steps:
-      - uses: khan/pull-request-comment-trigger@v1.1.0
-        id: check
-        with:
-          trigger: '/baseline'
-          reaction: rocket
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
