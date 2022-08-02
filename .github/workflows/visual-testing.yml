@@ -8,12 +8,28 @@ jobs:
   visual-testing:
     runs-on: ubuntu-20.04
     steps:
+      - name: Recognize sha ref
+        id: sharef
+        run: |
+          if [ "$EVENT" == 'pull_request' ]
+          then
+            echo "::set-output name=sha::$(echo ${{github.event.pull_request.head.sha}})"
+          elif [ "$EVENT" == 'workflow_run' ]
+          then
+            echo "::set-output name=sha::$(echo ${{github.event.workflow_run.head_sha}})"
+          else
+            echo "::set-output name=sha::$(echo $GITHUB_SHA)"
+          fi
+        env:
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.ref }}
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
       - uses: LouisBrunner/checks-action@v1.1.1
         with:
+            sha: ${{ steps.sharef.outputs.sha }}
             token: ${{ secrets.GITHUB_TOKEN }}
             name: visual-testing
             conclusion: "neutral"
