@@ -16,7 +16,7 @@ jobs:
           name: Test XYZ
           conclusion: ${{ job.status }}
           output: |
-            {"summary":${{ steps.test.outputs.summary }}}
+            {"summary":"Job Failed","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
   visual-testing:
     runs-on: ubuntu-20.04
     steps:
