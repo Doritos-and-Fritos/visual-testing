@@ -1,0 +1,30 @@
+name: Get Custom Field Value
+on:
+  push:
+    branches:
+        david/AP-4
+
+jobs:
+  getJiraKey:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Extract Jira Key from Branch Name
+        run: |
+          branchName=$(git symbolic-ref --short HEAD)
+          if [[ $branchName =~ ([A-Z][A-Z0-9]+-[0-9]+) ]]; then
+          jiraKey=${BASH_REMATCH[1]}
+          echo "jira_key=$jiraKey" >> $GITHUB_ENV
+          else
+            echo "no issue number found in string 'branchName'" >&2
+          fi
+      - name: Get test scenarios
+        if: ${{ env.jira_key != '' }}
+        run: |
+          issueId=${{ env.jira_key }}
+          apiEndpoint=https://${{secrets.JIRA_DOMAIN}}/rest/api/2/issue/$issueId
+      
+          customFieldValue=$(curl --request GET \ --url $apiEndpoint \ --user ${{secrets.JIRA_EMAIL}}:${{secrets.JIRA_TOKEN}} --header 'Accept: application/json' | jq -r '.fields.customfield_10038')
+
+          echo "Custom Field Value: $customFieldValue"
