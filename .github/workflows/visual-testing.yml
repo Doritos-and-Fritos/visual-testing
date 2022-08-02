@@ -8,17 +8,9 @@ jobs:
   visual-testing:
     runs-on: ubuntu-20.04
     steps:
-      - uses: LouisBrunner/checks-action@v1.1.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: visual-testing
-          conclusion: neutral
-          details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          output: |
-            {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
-        - uses: actions/checkout@v3
-        - uses: actions/setup-node@v2
-          with:
           node-version: '14'
 #      - name: Install dependencies
 #        run: yarn install --frozen-lockfile
@@ -48,12 +40,9 @@ jobs:
 #          issue-number: ${{ github.event.number  }}
 #          body: |
 #            This PR introduces visual changes, please check them out here! [Visual tests report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
-#        - uses: LouisBrunner/checks-action@v1.1.1
-#          with:
-#            token: ${{ secrets.GITHUB_TOKEN }}
-#            name: visual-testing
-#            conclusion: neutral
-#            status: completed
-#            details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-#            output: |
-#              {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
+        - uses: LouisBrunner/checks-action@v1.1.1
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            name: visual-testing
+            conclusion: neutral
+            status: completed
