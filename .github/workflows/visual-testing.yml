@@ -12,7 +12,7 @@ jobs:
       - uses: LouisBrunner/checks-action@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: visual-tests
+          name: visual-testing
           status: in_progress
           details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           output: |
@@ -46,7 +46,7 @@ jobs:
         uses: LouisBrunner/checks-action@v1.1.1
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
-            name: visual-tests
+            name: visual-testing
             conclusion: neutral
             status: completed
             details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
