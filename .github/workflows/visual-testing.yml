@@ -12,7 +12,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: visual-testing
-          status: in_progress
+          status: neutral
           details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           output: |
             {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
@@ -41,19 +41,19 @@ jobs:
 #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 #          AWS_DEFAULT_REGION: 'eu-central-1'
-      - name: Link report in comment
-        if: failure()
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.number  }}
-          body: |
-            This PR introduces visual changes, please check them out here! [Visual tests report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
-        - uses: LouisBrunner/checks-action@v1.1.1
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            name: visual-testing
-            conclusion: neutral
-            status: completed
-            details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            output: |
-              {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
+#      - name: Link report in comment
+#        if: failure()
+#        uses: peter-evans/create-or-update-comment@v2
+#        with:
+#          issue-number: ${{ github.event.number  }}
+#          body: |
+#            This PR introduces visual changes, please check them out here! [Visual tests report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
+#        - uses: LouisBrunner/checks-action@v1.1.1
+#          with:
+#            token: ${{ secrets.GITHUB_TOKEN }}
+#            name: visual-testing
+#            conclusion: neutral
+#            status: completed
+#            details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+#            output: |
+#              {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
