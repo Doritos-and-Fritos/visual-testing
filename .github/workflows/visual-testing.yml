@@ -6,7 +6,6 @@ on:
 
 jobs:
   visual-tests:
-    name: visual-tests
     runs-on: ubuntu-20.04
     steps:
       - uses: LouisBrunner/checks-action@v1.1.1
