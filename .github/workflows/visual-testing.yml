@@ -13,7 +13,7 @@ jobs:
         if: always()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Test XYZ
+          name: test_something
           conclusion: ${{ job.status }}
           output: |
             {"summary":"Job Failed","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
