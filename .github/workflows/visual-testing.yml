@@ -47,7 +47,7 @@ jobs:
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
             name: visual-tests
-            conclusion: "${{ job.status }}"
+            conclusion: neutral
             status: completed
             details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             output: |
