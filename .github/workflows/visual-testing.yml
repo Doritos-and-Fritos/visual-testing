@@ -1,0 +1,43 @@
+on:
+  pull_request:
+    branches:
+      - main
+    types: [ opened, ready_for_review, synchronize ]
+
+jobs:
+  visual-tests:
+    name: visual-tests
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Install Playwright
+        run: yarn playwright install --with-deps
+      - name: Download from s3
+        run: |
+          aws s3 sync s3://baseline-snapshots/playwright-snapshots/ snapshots/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
+      - name: Run your tests
+        run: yarn test
+      - name: Upload test report to s3
+        if: failure()
+        run: |
+          aws s3 sync playwright-report s3://visual-playwright-reports/${{ github.head_ref }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
+      - name: Link report in comment
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+            issue-number: ${{ github.event.number  }}
+            body: |
+                This PR introduces visual changes, please check them out here! [Visual tests report](https://visual-playwright-reports.s3.eu-central-1.amazonaws.com/${{ github.head_ref }}/index.html)
