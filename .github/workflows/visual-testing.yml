@@ -47,8 +47,8 @@ jobs:
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
             name: visual-tests
-            conclusion: neutral
-            status: "${{ job.status }}"
+            conclusion: "${{ job.status }}"
+            status: completed
             details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             output: |
               {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
