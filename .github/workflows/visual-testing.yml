@@ -42,12 +42,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
-      - uses: LouisBrunner/checks-action@v1.1.1
+      - name: update status
+        uses: LouisBrunner/checks-action@v1.1.1
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
             name: visual-tests
             conclusion: neutral
-            status: completed
+            status: "${{ job.status }}"
             details_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             output: |
               {"summary":"Test In Progress","text_description":"See job details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
