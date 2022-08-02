@@ -5,7 +5,7 @@ on:
     types: [ opened, ready_for_review, synchronize ]
 
 jobs:
-  visual-tests:
+  visual-testing:
     runs-on: ubuntu-20.04
     steps:
       - uses: LouisBrunner/checks-action@v1.1.1
