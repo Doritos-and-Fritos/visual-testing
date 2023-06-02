@@ -1,0 +1,33 @@
+name: Update PR Description
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  update-pr-description:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Get branch name
+        id: branch
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        
+      - name: Extract JIRA ticket
+        id: jira-ticket
+        run: echo "JIRA_TICKET=$(echo ${{ env.BRANCH_NAME }} | grep -oP '([A-Z]+-[0-9]+)')" >> $GITHUB_ENV
+        
+      - name: Update PR Description
+        run: |
+          ACCESS_TOKEN="${{ secrets.ACCESS_TOKEN }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          JIRA_TICKET="${{ env.JIRA_TICKET }}"
+          
+          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}"
+          
+          echo "Updating PR description..."
+          curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" -H "Accept: application/vnd.github.v3+json" $API_URL -d "{\"body\":\"JIRA Ticket: $JIRA_TICKET\"}"
