@@ -13,17 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Get branch name
-        id: branch
-        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Extract branch name
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
         
       - name: Extract JIRA ticket
         id: jira-ticket
-        run: echo "JIRA_TICKET=$(echo ${{ env.BRANCH_NAME }} | grep -oP '([A-Z]+-[0-9]+)')" >> $GITHUB_ENV
+        run: echo "JIRA_TICKET=$(echo ${{ steps.extract_branch.outputs.branch }} | grep -oP '([A-Z]+-[0-9]+)')" >> $GITHUB_ENV
         
       - name: Update PR Description
         run: |
-          ACCESS_TOKEN="${{ secrets.ACCESS_TOKEN }}"
+          ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           PR_NUMBER="${{ github.event.pull_request.number }}"
           JIRA_TICKET="${{ env.JIRA_TICKET }}"
           
