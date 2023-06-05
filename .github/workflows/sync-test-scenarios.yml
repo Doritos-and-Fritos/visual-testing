@@ -2,7 +2,7 @@ name: Get Custom Field Value
 on:
   push:
     branches:
-        david/AP-4
+        david/AP-5
 
 jobs:
   getJiraKey:
@@ -23,8 +23,8 @@ jobs:
         if: ${{ env.jira_key != '' }}
         run: |
           issueId=${{ env.jira_key }}
-          apiEndpoint=https://${{secrets.JIRA_DOMAIN}}/rest/api/2/issue/$issueId
+          apiEndpoint=https://davidkelly.atlassian.net/rest/api/2/issue/${issueId}
       
-          customFieldValue=$(curl --request GET \ --url $apiEndpoint \ --user ${{secrets.JIRA_EMAIL}}:${{secrets.JIRA_TOKEN}} --header 'Accept: application/json' | jq -r '.fields.customfield_10038')
+          customFieldValue=$(curl --request GET --url $apiEndpoint --user ${{secrets.JIRA_EMAIL}}:${{secrets.JIRA_TOKEN}} --header 'Accept: application/json' | jq -r '.fields.customfield_10038')
 
           echo "Custom Field Value: $customFieldValue"
