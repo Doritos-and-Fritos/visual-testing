@@ -1,8 +1,9 @@
 name: Get Custom Field Value
 on:
-  push:
+  pull_request:
     branches:
-        david/AP-5
+      - main
+    types: [opened]
 
 jobs:
   getJiraKey:
@@ -10,11 +11,50 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v7
+      
+      - name: Current branch name
+        run: |
+          echo "${{ steps.branch-name.outputs.current_branch }}"
+        # Outputs: "feature/test" current PR branch.
+
+      - name: Running on a non tag based branch and a PR branch.
+        if: steps.branch-name.outputs.is_default == 'false'
+        run: |
+          echo "Running on branch: ${{ steps.branch-name.outputs.current_branch }}"
+        # Outputs: "Running on branch: feature/test".
+      
+      - name: Running on a pull request (i.e non tag based branch).
+        if: steps.branch-name.outputs.is_tag == 'false' && steps.branch-name.outputs.is_default == 'false'
+        run: |
+          echo "Running on branch: ${{ steps.branch-name.outputs.current_branch }}"
+        # Outputs: "Running on branch: feature/test".
+      
+      - name: Get Ref branch name
+        run: |
+          echo "${{ steps.branch-name.outputs.ref_branch }}"
+        #  Outputs: "1/merge"
+
+      - name: Get Head Ref branch name (i.e The current pull request branch)
+        run: |
+          echo "${{ steps.branch-name.outputs.head_ref_branch }}"
+        # Outputs: "feature/test" current PR branch.
+
+      - name: Get Base Ref branch name (i.e The target of a pull request.)
+        run: |
+          echo "${{ steps.branch-name.outputs.base_ref_branch }}"
+        # Outputs: "main".
+      
+      - name: Default branch name
+        run: |
+          echo "${{ steps.branch-name.outputs.default_branch }}"
+        # Outputs: "main" the default branch.
       - name: Extract Jira Key from Branch Name
         run: |
           branchName=$(git symbolic-ref --short HEAD)
+          echo $branchName
           if [[ $branchName =~ ([A-Z][A-Z0-9]+-[0-9]+) ]]; then
           jiraKey=${BASH_REMATCH[1]}
           echo "jiraKey=$jiraKey" >> $GITHUB_ENV
@@ -24,12 +64,12 @@ jobs:
         run: |
           apiEndpoint=https://${{secrets.JIRA_DOMAIN}}/rest/api/2/issue/${{ env.jiraKey }}
           echo "testScenarios<<EOF" >> $GITHUB_ENV
-          curl --request GET --url $apiEndpoint --user ${{secrets.JIRA_EMAIL}}:${{secrets.JIRA_TOKEN}} --header 'Accept: application/json' | jq -r '.fields.customfield_10038' | awk '/---Test scenarios/{flag=1; next} /---/{flag=0} flag' | grep -v 'checked' | sed 's/text: //g' >> $GITHUB_ENV           
+          curl --request GET --url $apiEndpoint --user ${{secrets.JIRA_EMAIL}}:${{secrets.JIRA_TOKEN}} --header 'Accept: application/json' | jq -r '.fields.customfield_10036' | awk '/--- Test scenarios/{flag=1; next} /---/{flag=0} flag' | sed 's/\* \[\]/-/' >> $GITHUB_ENV           
           echo "EOF" >> $GITHUB_ENV
       - name: Leave a comment
         if: ${{ env.testScenarios != '' }}
         uses: mshick/add-pr-comment@v2
         with:
           message: |
-            🧪 Test scenarios for this story 🧪 
+            ## Test scenarios for this story 🧪 
             ${{ env.testScenarios }}
